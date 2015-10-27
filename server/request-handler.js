@@ -11,8 +11,8 @@ this file and include it in basic-server.js so that it actually works.
 *Hint* Check out the node module documentation at http://nodejs.org/api/modules.html.
 
 **************************************************************/
-
-var requestHandler = function(request, response) {
+var exports = module.exports = {};
+exports.requestHandler = function(request, response) {
   // Request and Response come from node's http module.
   //
   // They include information about both the incoming request, such as
@@ -34,7 +34,7 @@ var requestHandler = function(request, response) {
   var statusCode = 200;
 
   // See the note below about CORS headers.
-  var headers = defaultCorsHeaders;
+  var headers = exports.defaultCorsHeaders;
 
   // Tell the client we are sending them plain text.
   //
@@ -46,12 +46,17 @@ var requestHandler = function(request, response) {
   // .writeHead() writes to the request line and headers of the response,
   // which includes the status and all headers.
   response.writeHead(statusCode, headers);
-  console.log(request.statusCode);
+  console.log(response.status)
+
   if(response.method === 'POST'){
       console.log('inside post so post up!!!!');
       reponse.url = '127.0.0.1:3000/send';
       response.statusCode = 201;
-  };
+
+  }else if(response.method === 'GET'){
+    response.end(JSON.stringify({results: []}));
+
+  }
   // Make sure to always call response.end() - Node may not send
   // anything back to the client until you do. The string you pass to
   // response.end() will be the body of the response - i.e. what shows
@@ -63,7 +68,7 @@ var requestHandler = function(request, response) {
 };
 
 // These headers will allow Cross-Origin Resource Sharing (CORS).
-  var defaultCorsHeaders = {
+  exports.defaultCorsHeaders = {
     "access-control-allow-origin": "*",
     "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
     "access-control-allow-headers": "content-type, accept",
@@ -78,4 +83,5 @@ var requestHandler = function(request, response) {
 // Another way to get around this restriction is to serve you chat
 // client from this domain by setting up static file serving.
 
-module.exports = requestHandler;
+console.log(exports);
+// module.exports = requestHandler;
