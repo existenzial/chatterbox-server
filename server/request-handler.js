@@ -27,6 +27,7 @@ var requestHandler = function(request, response) {
   // Adding more logging to your server can be an easy way to get passive
   // debugging help, but you should always be careful about leaving stray
   // console.logs in your code.
+  console.log(request);
   console.log("Serving request type " + request.method + " for url " + request.url);
 
   // The outgoing status.
@@ -71,3 +72,4 @@ var defaultCorsHeaders = {
   "access-control-max-age": 10 // Seconds.
 };
 
+module.exports = requestHandler;
